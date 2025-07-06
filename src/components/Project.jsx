@@ -8,9 +8,9 @@ function Project() {
       description:
         "In this platform user can invite there friends and do the brain stroming on the whiteboard.by using Webscokets",
       images: [
-        "https://drive.google.com/uc?export=view&id=1_pPj-aQ0aGH7etb9F5U3nHJz5BX_-g7D",
-        "https://drive.google.com/uc?export=view&id=1yVDNYosew3psiqcr1cLhgFvOcA4AVZbz",
-        "https://drive.google.com/uc?export=view&id=13L851NtUy704RlnUcPtymTqH-egpzGK7",
+      "src/assests/Home.png",
+        "src/assests/Dashboard.png",
+        "src/assests/Board.png",
       ],
       github: "https://github.com/sanchayMandil/WhiteBoard-Collaboration-",
     },
