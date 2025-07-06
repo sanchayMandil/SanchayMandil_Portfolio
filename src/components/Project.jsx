@@ -1,5 +1,5 @@
 import React from "react";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 function Project() {
   const projects = [
@@ -8,9 +8,9 @@ function Project() {
       description:
         "In this platform user can invite there friends and do the brain stroming on the whiteboard.by using Webscokets",
       images: [
-      "src/assests/Home.png",
-        "src/assests/Dashboard.png",
-        "src/assests/Board.png",
+        "https://res.cloudinary.com/danwjrvic/image/upload/v1751828492/Home_hmynin.png",
+        "https://res.cloudinary.com/danwjrvic/image/upload/v1751828490/Board_ylxyc2.png",
+        "https://res.cloudinary.com/danwjrvic/image/upload/v1751828491/Dashboard_ds47o3.png",
       ],
       github: "https://github.com/sanchayMandil/WhiteBoard-Collaboration-",
     },
@@ -104,7 +104,7 @@ function Project() {
              ←
             </button>
             <AnimatePresence>
-              <img
+              <motion.img
                 key={projects[current].images[currentImage]}
                 src={projects[current].images[currentImage]}
                 alt={projects[current].name + " image"}
