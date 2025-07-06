@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 function Project() {
   const projects = [
@@ -104,7 +104,7 @@ function Project() {
              ←
             </button>
             <AnimatePresence>
-              <motion.img
+              <img
                 key={projects[current].images[currentImage]}
                 src={projects[current].images[currentImage]}
                 alt={projects[current].name + " image"}
