@@ -58,7 +58,7 @@ function Intro() {
           >
             {/* Profile Image */}
             <img
-              className="relative h-70 sm:h-64 md:h-96 w-70 sm:w-64 md:w-96 object-cover rounded-full border-8 border-transparent shadow-2xl transition-transform duration-300 group-hover:scale-105"
+              className="relative h-70 sm:h-64 md:h-70 w-70 sm:w-64 md:w-100 object-cover rounded-full border-8 border-transparent shadow-2xl transition-transform duration-300 group-hover:scale-105"
               src="https://cbx-prod.b-cdn.net/COLOURBOX58688312.jpg?width=800&height=800&quality=70"
               alt="Software Engineer Profile Picture"
               style={{ zIndex: 2 }}
