@@ -22,7 +22,7 @@ function Certificate() {
     };
 
     return (
-        <section className="border-t-2 border-b-2 border-white/30 my-16 py-12 bg-gray-900/20">
+        <section className="max-md:pt-[20vw] my-16 pt-[10vw] bg-gradient-to-br from-[#4f25b1] to-[#1d0642]">
             {/* Heading */}
             <h2 className="text-center mb-12">
                 <span className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-xl">
