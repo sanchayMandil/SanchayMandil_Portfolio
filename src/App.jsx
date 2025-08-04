@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import Header from './components/Header';
 import Intro from './components/Intro';
-import Skill from './components/Skill';
 import Project from './components/Project';
 import Certificate from './components/CertifIcate';
 import About from './components/Footer';
 
+// Lazy-load the Skill component
+const Skill = React.lazy(() => import('./components/Skill'));
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  state = { error: null };
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+  render() {
+    if (this.state.error) {
+      return <div className="text-red-500 p-4">Error: {this.state.error.message}</div>;
+    }
+    return this.props.children;
+  }
+}
+
 function App() {
   const controls = useAnimation();
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Simulate loading (e.g., for component rendering or data fetching)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false); // Set loading to false after 2 seconds
-    }, 2000); // Adjust duration as needed
-
-    return () => clearTimeout(timer); // Cleanup timeout
-  }, []);
 
   // Animation for horizontal electrical flow (left to right or right to left)
   const createHorizontalFlow = (isReverse = false) => ({
@@ -50,198 +56,108 @@ function App() {
     },
   });
 
-  // Generate random lines (mix of horizontal and vertical)
-  const randomLines = Array.from({ length: 6 }).map((_, index) => {
-    const isHorizontal = Math.random() > 0.5;
-    const isReverse = Math.random() > 0.5;
-    const position = Math.random() * 80 + 10; // Position between 10% and 90%
-
-    return (
-      <motion.div
-        key={`line-${index}`}
-        className={`fixed ${isHorizontal ? 'h-0.5 w-full' : 'w-0.5 h-full'}`}
-        style={{
-          [isHorizontal ? 'top' : 'left']: `${position}%`,
-          background: `linear-gradient(${isHorizontal ? '90deg' : '180deg'}, transparent, #8B5CF6, transparent)`,
-          boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
-          zIndex: -10,
-        }}
-        variants={isHorizontal ? createHorizontalFlow(isReverse) : createVerticalFlow(isReverse)}
-        initial="hidden"
-        animate={controls}
-      />
-    );
-  });
-
   // Start animations
   useEffect(() => {
     controls.start('visible');
   }, [controls]);
 
-  // Stylish loader component matching the electrical flow theme
-  const Loader = () => (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-      <div className="relative w-32 h-32">
-        {/* Central pulsing node */}
-        <motion.div
-          className="absolute inset-4 rounded-full bg-[#8B5CF6] opacity-30"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 2.4, // Slowed from 1.2 to 2.4 seconds
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+  return (
+    <ErrorBoundary>
+      <>
+        {/* Background pattern */}
+        <div
+          className="fixed inset-0 -z-10 opacity-10 backdrop-blur-sm"
           style={{
-            boxShadow: '0 0 15px #8B5CF6, 0 0 30px #8B5CF6',
+            backgroundImage:
+              "url('https://img.icons8.com/?size=100&id=YVToA9CPXtKW&format=png&color=000000')",
+            backgroundRepeat: 'repeat',
+            backgroundSize: 'auto',
+            backgroundPosition: 'center',
           }}
-        />
-        {/* Electrical flow lines forming a cross */}
+        ></div>
+
+        {/* Original horizontal electrical flow */}
         <motion.div
-          className="absolute top-1/2 h-0.5 w-full"
+          className="fixed top-1/4 left-0 h-0.5 w-full"
           style={{
             background: 'linear-gradient(90deg, transparent, #8B5CF6, transparent)',
             boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
           }}
-          animate={{
-            x: ['-100%', '100%'],
-            opacity: [0, 1, 0],
-          }}
-          transition={{
-            duration: 3, // Slowed from 1.5 to 3 seconds
-            repeat: Infinity,
-            repeatDelay: 1, // Increased delay to 1 second for smoother pacing
-            ease: 'linear',
-          }}
+          variants={createHorizontalFlow()}
+          initial="hidden"
+          animate={controls}
         />
         <motion.div
-          className="absolute left-1/2 w-0.5 h-full"
+          className="fixed top-[60%] left-0 h-0.5 w-full"
+          style={{
+            background: 'linear-gradient(90deg, transparent, #8B5CF6, transparent)',
+            boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
+          }}
+          variants={createHorizontalFlow()}
+          initial="hidden"
+          animate={controls}
+        />
+
+        {/* Original vertical electrical flow */}
+        <motion.div
+          className="fixed top-0 left-1/4 w-0.5 h-full"
           style={{
             background: 'linear-gradient(180deg, transparent, #8B5CF6, transparent)',
             boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
           }}
-          animate={{
-            y: ['-100%', '100%'],
-            opacity: [0, 1, 0],
-          }}
-          transition={{
-            duration: 3, // Slowed from 1.5 to 3 seconds
-            repeat: Infinity,
-            repeatDelay: 1, // Increased delay to 1 second for smoother pacing
-            ease: 'linear',
-          }}
+          variants={createVerticalFlow()}
+          initial="hidden"
+          animate={controls}
         />
-        {/* Orbiting spark */}
         <motion.div
-          className="absolute w-2 h-2 bg-[#8B5CF6] rounded-full"
+          className="fixed top-0 left-[60%] w-0.5 h-full"
           style={{
-            top: '50%',
-            left: '50%',
-            boxShadow: '0 0 10px #8B5CF6',
+            background: 'linear-gradient(180deg, transparent, #8B5CF6, transparent)',
+            boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
           }}
-          animate={{
-            rotate: 360,
-            scale: [1, 1.5, 1],
-          }}
-          transition={{
-            duration: 4, // Slowed from 2 to 4 seconds
-            repeat: Infinity,
-            ease: 'linear',
-          }}
+          variants={createVerticalFlow()}
+          initial="hidden"
+          animate={controls}
         />
-        {/* Loading text */}
-        <motion.div
-          className="absolute bottom-[-2rem] w-full text-center text-[#8B5CF6] text-sm font-mono"
-          animate={{
-            opacity: [0.4, 1, 0.4],
-          }}
-          transition={{
-            duration: 2.4, // Slowed from 1.2 to 2.4 seconds
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        >
-          Loading...
-        </motion.div>
-      </div>
-    </div>
-  );
 
-  return (
-    <>
-      {/* Loader */}
-      {isLoading && <Loader />}
-
-      {/* Background pattern */}
-      <div
-        className="fixed inset-0 -z-10 opacity-10 backdrop-blur-sm"
-        style={{
-          backgroundImage:
-            "url('https://img.icons8.com/?size=100&id=YVToA9CPXtKW&format=png&color=000000')",
-          backgroundRepeat: 'repeat',
-          backgroundSize: 'auto',
-          backgroundPosition: 'center',
-        }}
-      ></div>
-
-      {/* Original horizontal electrical flow */}
-      <motion.div
-        className="fixed top-1/4 left-0 h-0.5 w-full"
-        style={{
-          background: 'linear-gradient(90deg, transparent, #8B5CF6, transparent)',
-          boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
-        }}
-        variants={createHorizontalFlow()}
-        initial="hidden"
-        animate={controls}
-      />
-        <motion.div
-        className="fixed top-[60%] left-0 h-0.5 w-full"
-        style={{
-          background: 'linear-gradient(90deg, transparent, #8B5CF6, transparent)',
-          boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
-        }}
-        variants={createHorizontalFlow()}
-        initial="hidden"
-        animate={controls}
-      />
-
-      {/* Original vertical electrical flow */}
-      <motion.div
-        className="fixed top-0 left-1/4 w-0.5 h-full"
-        style={{
-          background: 'linear-gradient(180deg, transparent, #8B5CF6, transparent)',
-          boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
-        }}
-        variants={createVerticalFlow()}
-        initial="hidden"
-        animate={controls}
-      />
-      <motion.div
-        className="fixed top-0 left-[60%] w-0.5 h-full"
-        style={{
-          background: 'linear-gradient(180deg, transparent, #8B5CF6, transparent)',
-          boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6',
-        }}
-        variants={createVerticalFlow()}
-        initial="hidden"
-        animate={controls}
-      />
-
-      <Header />
-      <div className="relative top-20 mt-5 ">
-        <Intro />
-        <Skill />
-        <Project />
-        <Certificate />
-        
-      <About />
-      </div>
-
-
-    </>
+        <Header />
+        <div className="relative top-20 mt-5">
+          <Intro />
+          <Suspense
+            fallback={
+              <div
+                className="py-8"
+                style={{
+                  background: 'linear-gradient(to bottom right, #4f25b1, #190438)',
+                  minHeight: '200px', // Match approximate Skill section height
+                }}
+              >
+                <div className="text-white text-center">Loading Skills...</div>
+              </div>
+            }
+          >
+            <Skill />
+          </Suspense>
+          <div
+            className="bg-gradient-to-br mt-[10vw] from-[#4f25b1] to-[#190438] py-[10vw] max-md:py-[20vw]"
+            style={{
+              clipPath: 'polygon(24% 0, 100% 5%, 100% 100%, 0 100%, 0 5%)',
+              transform: 'translateZ(0)', // Force GPU acceleration
+              position: 'relative', // Ensure proper stacking context
+              zIndex: 1, // Prevent overlap with background elements
+              contain: 'paint', // Isolate painting to reduce interference
+            }}
+          >
+            <Project />
+            <div className="mt-[10vw]"
+             style={{ clipPath: 'polygon(79% 0, 100% 10%, 100% 100%, 0 100%, 0 10%)' }}>
+              <Certificate />
+            </div>
+          </div>
+          <About />
+        </div>
+      </>
+    </ErrorBoundary>
   );
 }
 
